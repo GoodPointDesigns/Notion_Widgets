@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greetings</title>
+
+    <style>
+        body {
+            font-variant-caps: all-petite-caps;
+            margin: 0px;
+        }
+        
+        .flex_box {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -webkit-flex-direction: column;
+            -moz-box-orient: vertical;
+            -moz-box-direction: normal;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            padding: 5px 5px ;
+            color: #000000;
+            justify-content:center;
+            align-items:center;
+            border: 3px solid #000000;
+            border-radius: 5px;
+            box-shadow: 2px 2px 1px 0px #000000;
+        } 
+
+        .container {
+
+        }
+
+        .div_box {
+        -webkit-box-flex: 1;
+        -webkit-flex: 1;
+        -moz-box-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -moz-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+        -moz-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: column;
+        -moz-box-orient: vertical;
+        -moz-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        }
+
+        .greet{
+            font-size: 3em;
+        }
+  
+    </style>
+    
+</head>
+
+<body>
+    <div class="flex_box">
+
+        <div class="greet div_box" id="greet"></div>
+            <div class="div_box">B</div>
+
+    </div>
+
+    <script>
+
+        function dispalyGreetings(today){
+                hrs = today.getHours();
+                name=""
+                if (hrs < 12)
+                    greet = 'Good Morning  '+name;
+                else if (hrs >= 12 && hrs <= 17)
+                    greet = 'Good Afternoon '+name;
+                else if (hrs >= 17 && hrs <= 24)
+                    greet = 'Good Evening  '+name;
+                document.getElementById('greet').innerHTML = greet;
+        
+            }
+        
+            function dispalyDate(today) {  
+               
+                const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                const monthNames = ["January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"
+        ];
+        
+                var dayName = days[today.getDay()];
+                var monthName = monthNames[today.getMonth()];
+                var date = today.getDate();
+                var year = today.getFullYear();
+                document.getElementById('date').innerHTML =dayName+", "+monthName+" "+date+" "+year;
+        
+            }
+        
+        
+            function dispalyClock(today) {
+        
+                var hour = padZeros(twelveHour(today.getHours()));
+                var minutes = padZeros(today.getMinutes());
+                var seconds = padZeros(today.getSeconds());
+               
+                if(today.getHours() >=12){
+                    seconds+=" pm"
+                }
+                else{
+                    seconds+=" am"
+                }
+               
+                document.getElementById('hour').innerHTML = hour;
+                document.getElementById('min').innerHTML = minutes;
+                document.getElementById('sec').innerHTML = seconds;
+            }
+        
+            function twelveHour(hour) {
+                if (hour > 12) {
+                    return hour -= 12
+                } else if (hour === 0) {
+                    return hour = 12;
+                } else {
+                    return hour
+                }
+            }
+            function padZeros(num) {
+                if (num < 10) {
+                    num = '0' + num
+                };
+                return num;
+            }
+        
+            function dispalyWidget() {
+                var today = new Date();
+                dispalyGreetings(today);
+                dispalyDate(today);
+                dispalyClock(today);
+                setTimeout(dispalyWidget, 500);
+            }
+        
+            dispalyWidget()
+        
+        </script>
+</body>
+    
+</html>

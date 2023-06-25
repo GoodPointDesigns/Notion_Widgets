@@ -10,7 +10,7 @@
             font-variant-caps: all-petite-caps;
             margin: 0px;
         }
-        
+
         .flex_box {
             display: -webkit-box;
             display: -webkit-flex;
@@ -27,8 +27,8 @@
             position: absolute;
             top: 0px;
             left: 0px;
-            width: 100%;
-            height: 100%;
+            width: 98%;
+            height: 97%;
             overflow: hidden;
             padding: 5px 5px ;
             color: #000000;
@@ -38,10 +38,6 @@
             border-radius: 5px;
             box-shadow: 2px 2px 1px 0px #000000;
         } 
-
-        .container {
-
-        }
 
         .div_box {
         -webkit-box-flex: 1;
@@ -72,6 +68,25 @@
             font-size: 3em;
         }
   
+        .date {
+            font-family: monospace;
+            font-size: 2em;
+        }
+
+        .clock {
+            font-family: monospace;
+            font-size: 2em;
+        }
+
+        .time {
+            display: inline-block;
+            min-width: 20px;
+        }
+
+        .colon {
+            font-size: 1em;
+            display: inline-block;
+        }
     </style>
     
 </head>
@@ -80,7 +95,7 @@
     <div class="flex_box">
 
         <div class="greet div_box" id="greet"></div>
-            <div class="div_box">B</div>
+        <div class="date div_box" id="date"></div>
 
     </div>
 

@@ -6,62 +6,43 @@
     <title>Greetings</title>
 
     <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-variant-caps: all-petite-caps;
             margin: 0px;
+            min-height: 100vh;
+            text-rendering: optimizeSpeed;
+            line-height: 1.5;
+            line-height: var(--amplify-line-heights-medium);
         }
 
-        .flex_box {
-            display: -webkit-box;
-            display: -webkit-flex;
-            display: -moz-box;
-            display: -ms-flexbox;
-            display: flex;
-            -webkit-box-orient: vertical;
-            -webkit-box-direction: normal;
-            -webkit-flex-direction: column;
-            -moz-box-orient: vertical;
-            -moz-box-direction: normal;
-            -ms-flex-direction: column;
-            flex-direction: column;
+        .container {
             position: absolute;
-            top: 0px;
-            left: 0px;
-            width: 98%;
-            height: 97%;
+            top: 1px;
+            left: 1px;
+            width: 100%;
+            height: 100%;
             overflow: hidden;
-            padding: 5px 5px ;
+            background-color: rgb(255, 255, 255);
+        }
+
+        .textbox {
+            width: 99%;
+            height: 99%;
+            border: 0px solid rgb(247, 247, 247);
             color: #000000;
-            justify-content:center;
-            align-items:center;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            display: flex;
+            padding: 5px 5px;
             border: 3px solid #000000;
             border-radius: 5px;
             box-shadow: 2px 2px 1px 0px #000000;
-        } 
-
-        .div_box {
-        -webkit-box-flex: 1;
-        -webkit-flex: 1;
-        -moz-box-flex: 1;
-        -ms-flex: 1;
-        flex: 1;
-        display: -webkit-box;
-        display: -webkit-flex;
-        display: -moz-box;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-box-pack: center;
-        -webkit-justify-content: center;
-        -moz-box-pack: center;
-        -ms-flex-pack: center;
-        justify-content: center;
-        -webkit-box-orient: vertical;
-        -webkit-box-direction: normal;
-        -webkit-flex-direction: column;
-        -moz-box-orient: vertical;
-        -moz-box-direction: normal;
-        -ms-flex-direction: column;
-        flex-direction: column;
         }
 
         .greet{
@@ -92,11 +73,11 @@
 </head>
 
 <body>
-    <div class="flex_box">
-
-        <div class="greet div_box" id="greet"></div>
-        <div class="date div_box" id="date"></div>
-
+    <div class="container">
+        <div class="textbox">
+            <div class="greet div_box" id="greet"></div>
+            <div class="date div_box" id="date"></div>
+        </div>
     </div>
 
     <script>

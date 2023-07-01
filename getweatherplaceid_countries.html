@@ -1,58 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-  <button id="generateCsv">Generate CSV</button>
+    <button id="generateCsv">Generate CSV</button>
 
-  <script>
-    $(document).ready(function() {
-      $('#generateCsv').on('click', function() {
-        $.get('https://restcountries.com/v3.1/all', function(data) {
-          let csvContent = 'data:text/csv;charset=utf-8,Country,Output\n';
-          let completedRequests = 0;
-          let totalRequests = data.length;
-
-          data.forEach(function(country) {
-            let countryName = country.name.common;
-            let countryAPIUrl = `https://forecast7.com/api/autocomplete/${encodeURIComponent(countryName)}`;
-
-            $.get(countryAPIUrl, function(response) {
-              if (response && response.length > 0) {
-                let placeId = response[0].place_id;
-                let getURL = `https://forecast7.com/api/getUrl/${encodeURIComponent(placeId)}`;
-
-                $.get(getURL, function(output) {
-                  csvContent += `${countryName},${output}\n`;
-                  completedRequests++;
-
-                  if (completedRequests === totalRequests) {
-                    downloadCsv(csvContent);
-                  }
-                });
-              } else {
-                csvContent += `${countryName},N/A\n`;
-                completedRequests++;
-
-                if (completedRequests === totalRequests) {
-                  downloadCsv(csvContent);
-                }
-              }
+    <script>
+        $(document).ready(function() {
+            $('#generateCsv').click(function() {
+                window.location.href = 'generate_csv.php';
             });
-          });
         });
-      });
-
-      function downloadCsv(csvContent) {
-        let encodedUri = encodeURI(csvContent);
-        let link = document.createElement('a');
-        link.setAttribute('href', encodedUri);
-        link.setAttribute('download', 'country_output.csv');
-        document.body.appendChild(link);
-        link.click();
-      }
-    });
-  </script>
+    </script>
 </body>
 </html>

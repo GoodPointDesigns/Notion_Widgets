@@ -1,17 +1,58 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>Country Output CSV Generator</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
-<body>
-    <button id="generateCsv">Generate CSV</button>
-
     <script>
-        $(document).ready(function() {
-            $('#generateCsv').click(function() {
-                window.location.href = 'getweatherplaceid_countries.php';
+        $(document).ready(function () {
+            $('#generate-csv').on('click', function () {
+                $.getJSON('https://api.allorigins.win/raw?url=https://restcountries.com/v3.1/all', function (countries) {
+                    var csvContent = "Country,Output\n";
+
+                    function processCountry(index) {
+                        if (index >= countries.length) {
+                            downloadCSV(csvContent);
+                            return;
+                        }
+
+                        var country = countries[index];
+                        var countryName = country.name.common;
+                        var countryAPIUrl = 'https://api.allorigins.win/raw?url=https://forecast7.com/api/autocomplete/' + encodeURIComponent(countryName);
+
+                        $.getJSON(countryAPIUrl, function (responseJson) {
+                            if (responseJson.length > 0 && responseJson[0].place_id) {
+                                var placeId = responseJson[0].place_id;
+                                var getURL = 'https://api.allorigins.win/raw?url=https://forecast7.com/api/getUrl/' + encodeURIComponent(placeId);
+
+                                $.getJSON(getURL, function (output) {
+                                    csvContent += countryName + ',' + output + '\n';
+
+                                    processCountry(index + 1);
+                                });
+                            } else {
+                                csvContent += countryName + ',N/A\n';
+
+                                processCountry(index + 1);
+                            }
+                        });
+                    }
+
+                    processCountry(0);
+                });
             });
+
+            function downloadCSV(csvContent) {
+                var encodedUri = encodeURI('data:text/csv;charset=utf-8,' + csvContent);
+                var link = document.createElement('a');
+                link.setAttribute('href', encodedUri);
+                link.setAttribute('download', 'country_output.csv');
+                document.body.appendChild(link);
+                link.click();
+            }
         });
     </script>
+</head>
+<body>
+    <button id="generate-csv">Generate CSV</button>
 </body>
 </html>

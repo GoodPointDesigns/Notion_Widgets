@@ -8,7 +8,7 @@
 
   <script>
     $(document).ready(function() {
-      $('#generateCsv').click(function() {
+      $('#generateCsv').on('click', function() {
         $.get('https://restcountries.com/v3.1/all', function(data) {
           let csvContent = 'data:text/csv;charset=utf-8,Country,Output\n';
           let completedRequests = 0;

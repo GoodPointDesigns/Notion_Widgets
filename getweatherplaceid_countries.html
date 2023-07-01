@@ -1,65 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Country Weather API</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-  <button id="generateCsvButton">Generate CSV</button>
+  <button id="generateCsv">Generate CSV</button>
 
   <script>
     $(document).ready(function() {
-      var countries = [];
+      $('#generateCsv').click(function() {
+        $.get('https://restcountries.com/v3.1/all', function(data) {
+          let csvContent = 'data:text/csv;charset=utf-8,Country,Output\n';
 
-      // Fetch all countries from REST Countries API
-      $.ajax({
-        url: "https://restcountries.com/v3.1/all",
-        method: "GET",
-        success: function(response) {
-          countries = response.map(function(country) {
-            return country.name.common;
-          });
-        },
-        error: function() {
-          console.log("Error fetching countries from the API.");
-        }
-      }).then(function() {
-        // Generate CSV function
-        function generateCsv() {
-          var csvContent = "data:text/csv;charset=utf-8,";
-          csvContent += "Country,Weather URL\n";
+          data.forEach(function(country) {
+            let countryName = country.name.common;
+            let countryAPIUrl = `https://forecast7.com/api/autocomplete/${encodeURIComponent(countryName)}`;
 
-          // Loop through each country and make the API calls
-          countries.forEach(function(country) {
-            var autocompleteUrl = "https://forecast7.com/api/autocomplete/" + encodeURIComponent(country);
-            $.ajax({
-              url: autocompleteUrl,
-              method: "GET",
-              success: function(response) {
-                var placeId = response.place_id;
-                var weatherUrl = "https://forecast7.com/api/getUrl/" + placeId;
-                csvContent += '"' + country + '","' + weatherUrl + '"\n';
-              },
-              error: function() {
-                console.log("Error fetching autocomplete data for " + country);
-              },
-              async: false // Ensure synchronous execution
+            $.get(countryAPIUrl, function(response) {
+              if (response && response.length > 0) {
+                let placeId = response[0].place_id;
+                let getURL = `https://forecast7.com/api/getUrl/${encodeURIComponent(placeId)}`;
+
+                $.get(getURL, function(output) {
+                  csvContent += `${countryName},${output}\n`;
+                });
+              } else {
+                csvContent += `${countryName},N/A\n`;
+              }
             });
           });
 
-          // Create a hidden link and trigger the download
-          var encodedUri = encodeURI(csvContent);
-          var link = document.createElement("a");
-          link.setAttribute("href", encodedUri);
-          link.setAttribute("download", "weather_data.csv");
-          link.textContent = "Download CSV";
-          document.body.appendChild(link);
-        }
-
-        // Generate CSV button click event
-        $("#generateCsvButton").click(function() {
-          generateCsv();
+          setTimeout(function() {
+            let encodedUri = encodeURI(csvContent);
+            let link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', 'country_output.csv');
+            document.body.appendChild(link);
+            link.click();
+          }, 3000);
         });
       });
     });

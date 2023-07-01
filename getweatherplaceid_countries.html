@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Country Weather API</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <button id="generateCsvButton">Generate CSV</button>
+
+  <script>
+    $(document).ready(function() {
+      var countries = [];
+
+      // Fetch all countries from REST Countries API
+      $.ajax({
+        url: "https://restcountries.com/v3.1/all",
+        method: "GET",
+        success: function(response) {
+          countries = response.map(function(country) {
+            return country.name.common;
+          });
+        },
+        error: function() {
+          console.log("Error fetching countries from the API.");
+        }
+      }).then(function() {
+        // Generate CSV function
+        function generateCsv() {
+          var csvContent = "data:text/csv;charset=utf-8,";
+          csvContent += "Country,Weather URL\n";
+
+          // Loop through each country and make the API calls
+          countries.forEach(function(country) {
+            var autocompleteUrl = "https://forecast7.com/api/autocomplete/" + encodeURIComponent(country);
+            $.ajax({
+              url: autocompleteUrl,
+              method: "GET",
+              success: function(response) {
+                var placeId = response.place_id;
+                var weatherUrl = "https://forecast7.com/api/getUrl/" + placeId;
+                csvContent += '"' + country + '","' + weatherUrl + '"\n';
+              },
+              error: function() {
+                console.log("Error fetching autocomplete data for " + country);
+              },
+              async: false // Ensure synchronous execution
+            });
+          });
+
+          // Create a hidden link and trigger the download
+          var encodedUri = encodeURI(csvContent);
+          var link = document.createElement("a");
+          link.setAttribute("href", encodedUri);
+          link.setAttribute("download", "weather_data.csv");
+          link.textContent = "Download CSV";
+          document.body.appendChild(link);
+        }
+
+        // Generate CSV button click event
+        $("#generateCsvButton").click(function() {
+          generateCsv();
+        });
+      });
+    });
+  </script>
+</body>
+</html>

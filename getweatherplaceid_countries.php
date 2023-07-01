@@ -25,5 +25,7 @@ foreach ($countries as $country) {
     }
 }
 
-echo $csvContent;
+$file = fopen('php://output', 'w');
+fwrite($file, $csvContent);
+fclose($file);
 ?>
